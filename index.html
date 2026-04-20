@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>简单计算器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f6f7fb;
+    }
+
+    .calculator {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      width: 320px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 0 0 16px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    input,
+    select,
+    button {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+
+    button {
+      cursor: pointer;
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    #result {
+      margin-top: 12px;
+      font-weight: 600;
+      min-height: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h1>计算器</h1>
+    <div class="row">
+      <input id="num1" type="number" placeholder="输入第一个数字" />
+      <input id="num2" type="number" placeholder="输入第二个数字" />
+      <select id="operator">
+        <option value="+">加法 (+)</option>
+        <option value="-">减法 (-)</option>
+        <option value="*">乘法 (*)</option>
+        <option value="/">除法 (/)</option>
+      </select>
+      <div class="actions">
+        <button type="button" onclick="onCalculate()">计算</button>
+        <button class="secondary" type="button" onclick="onReset()">清空</button>
+      </div>
+    </div>
+    <div id="result">结果：--</div>
+  </div>
+
+  <script>
+    function add(a, b) {
+      return a + b;
+    }
+
+    function subtract(a, b) {
+      return a - b;
+    }
+
+    function multiply(a, b) {
+      return a * b;
+    }
+
+    function divide(a, b) {
+      if (b === 0) {
+        return '除数不能为 0';
+      }
+      return a / b;
+    }
+
+    function calculate(a, b, op) {
+      switch (op) {
+        case '+':
+          return add(a, b);
+        case '-':
+          return subtract(a, b);
+        case '*':
+          return multiply(a, b);
+        case '/':
+          return divide(a, b);
+        default:
+          return '不支持的运算符';
+      }
+    }
+
+    function parseNumber(raw) {
+      if (raw.trim() === '') {
+        return null;
+      }
+
+      const value = Number(raw);
+      return Number.isFinite(value) ? value : null;
+    }
+
+    function onCalculate() {
+      const num1Raw = document.getElementById('num1').value;
+      const num2Raw = document.getElementById('num2').value;
+      const op = document.getElementById('operator').value;
+
+      const a = parseNumber(num1Raw);
+      const b = parseNumber(num2Raw);
+
+      if (a === null || b === null) {
+        document.getElementById('result').textContent = '结果：请输入有效数字';
+        return;
+      }
+
+      const value = calculate(a, b, op);
+      document.getElementById('result').textContent = `结果：${value}`;
+    }
+
+    function onReset() {
+      document.getElementById('num1').value = '';
+      document.getElementById('num2').value = '';
+      document.getElementById('operator').value = '+';
+      document.getElementById('result').textContent = '结果：--';
+    }
+  </script>
+</body>
+</html>
